@@ -221,8 +221,8 @@ body {
     width: 344px;
 }
 
-.songlist .info .cen {
-    width: 200px;
+.info{
+    font-size: 13px;
 }
 
 .seekbar {

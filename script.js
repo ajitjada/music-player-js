@@ -1,5 +1,3 @@
-console.log("lets start javascript");
-
 let currentsong = new Audio();
 let songs;
 let currfolder;
@@ -27,13 +25,12 @@ async function getsongs(folder) {
     let div = document.createElement("div")
     div.innerHTML = response;
     let as = div.getElementsByTagName("a")
-
     songs = []
 
     for (let index = 0; index < as.length; index++) {
         const element = as[index];
         if (element.href.endsWith(".mp3")) {
-            songs.push(decodeURIComponent(element.href.split("cs").slice(-1)[0]))    // %5Cncs%5C     %5Ccs%5C
+            songs.push(decodeURIComponent(element.href.split("cs").slice(-1)[0]).replace(/^\\/, ""))
         }
     }
 
@@ -57,7 +54,7 @@ async function getsongs(folder) {
     // Attach an event listener to each song
     Array.from(document.querySelector(".songlist").getElementsByTagName("li")).forEach(e => {
         e.addEventListener("click", element => {
-            console.log(e.querySelector(".info").firstElementChild.innerHTML)
+            // console.log(e.querySelector(".info").firstElementChild.innerHTML)
             playMusic(e.querySelector(".info").firstElementChild.innerHTML.trim())
 
         })
@@ -80,7 +77,7 @@ const playMusic = (track, pause = false) => {
 
 
 async function displayAlbums() {
-    console.log("displaying albums")
+    // console.log("displaying albums")
     let a = await fetch(`/songs/`)
     let response = await a.text()
     let div = document.createElement("div")
@@ -192,7 +189,7 @@ async function main() {
     //Load the playlist whenever card is clicked
     Array.from(document.getElementsByClassName("card")).forEach(e => {
         e.addEventListener("click", async item => {
-            console.log(item, item.currentTarget.dataset.folder)
+            // console.log(item, item.currentTarget.dataset.folder)
             songs = await getsongs(`songs/${item.currentTarget.dataset.folder}`)
             playMusic(songs[0])
         })
@@ -213,6 +210,7 @@ async function main() {
         }
     })
 
+    //automatic next song play
     currentsong.addEventListener("ended", () => {
         let index = songs.indexOf(decodeURIComponent(currentsong.src.split("/").slice(-1)[0]))
 
